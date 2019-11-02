@@ -12,6 +12,7 @@ import frc.robot.subsystems.*;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -88,5 +89,8 @@ public class Robot extends TimedRobot {
 	}
 
 	@Override
-  public void robotPeriodic() {}
+  public void robotPeriodic() {
+	SmartDashboard.putString("Centric mode", drivetrain.getCentricMode().toString() + "-CENTRIC");
+	SmartDashboard.putBoolean("Beak is front", drivetrain.beakIsFront());
+  }
 }
