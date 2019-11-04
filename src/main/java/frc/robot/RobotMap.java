@@ -24,26 +24,26 @@ public class RobotMap {
   
   
   //Motor 0
-  public static int leftFront = 0;
-  public static int leftFrontS = 1;
+  public static int leftFront = 1;
+  public static int leftFrontS = 2;
   public static boolean leftFrontI = false;
   public static boolean leftFrontSI = false;
   
   //Motor 1
-  public static int rightFront = 2;
-  public static int rightFrontS = 3;
+  public static int rightFront = 3;
+  public static int rightFrontS = 4;
   public static boolean rightFrontI = true;
   public static boolean rightFrontSI = false;
   
   //Motor 2
-  public static int rightBack = 4;
-  public static int rightBackS = 5;
+  public static int rightBack = 5;
+  public static int rightBackS = 6;
   public static boolean rightBackI = true;
   public static boolean rightBackSI = false;
   
   //Motor 3
-  public static int leftBack = 6;
-  public static int leftBackS = 7;
+  public static int leftBack = 7;
+  public static int leftBackS = 8;
   public static boolean leftBackI = false;
   public static boolean leftBackSI = false;
   
