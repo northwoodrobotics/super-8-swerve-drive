@@ -84,9 +84,10 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
 	SmartDashboard.putString("Centric mode", drivetrain.getCentricMode().toString() + "-CENTRIC");
 	SmartDashboard.putBoolean("Beak is front", drivetrain.beakIsFront());
-	SmartDashboard.putNumber("Front left wheel angle is : ", drivetrain.getWheelAngles()[0]);
-	SmartDashboard.putNumber("Front right wheel angle is : ", drivetrain.getWheelAngles()[1]);
-	SmartDashboard.putNumber("Rear right wheel angle is : ", drivetrain.getWheelAngles()[2]);
-	SmartDashboard.putNumber("Rear left wheel angle is : ", drivetrain.getWheelAngles()[3]);
+	//prints mod360 to get absolute wheel angle
+	SmartDashboard.putNumber("Front left wheel angle is : ", drivetrain.getWheelAngles()[0] % 360);
+	SmartDashboard.putNumber("Front right wheel angle is : ", drivetrain.getWheelAngles()[1] % 360);
+	SmartDashboard.putNumber("Rear right wheel angle is : ", drivetrain.getWheelAngles()[2] % 360);
+	SmartDashboard.putNumber("Rear left wheel angle is : ", drivetrain.getWheelAngles()[3] % 360);
   }
 }
