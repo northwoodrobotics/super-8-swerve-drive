@@ -25,10 +25,10 @@ public class ToggleFrontDirection extends Command {
 		startTime = Timer.getFPGATimestamp();
 		OI.driveController.setRumble(RumbleType.kRightRumble, 1.0);
 
-		if (drivetrain.beakIsFront()) {
-			drivetrain.setClawAsFront();
+		if (drivetrain.SouthIsFront()) {
+			drivetrain.setNorthAsFront();
 		} else {
-			drivetrain.setBeakAsFront();
+			drivetrain.setSouthAsFront();
 		}
 	}
 

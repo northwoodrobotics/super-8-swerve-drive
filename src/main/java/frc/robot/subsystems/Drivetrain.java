@@ -24,11 +24,17 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 
 public class Drivetrain extends Subsystem {
-	private CanTalonSwerveEnclosure swerveEnclosure1;
-	private CanTalonSwerveEnclosure swerveEnclosure0;
-	private CanTalonSwerveEnclosure swerveEnclosure3;
-	private CanTalonSwerveEnclosure swerveEnclosure2;
-	private SwerveDrive swerveDrive;
+	private CanTalonSwerveEnclosure swerveEnclosureNorthwest;
+	private CanTalonSwerveEnclosure swerveEnclosureNortheast;
+	private CanTalonSwerveEnclosure swerveEnclosureSoutheast;
+	private CanTalonSwerveEnclosure swerveEnclosureSouthwest;
+
+	private CanTalonSwerveEnclosure swerveEnclosureWest;
+	private CanTalonSwerveEnclosure swerveEnclosureNorth;
+	private CanTalonSwerveEnclosure swerveEnclosureEast;
+	private CanTalonSwerveEnclosure swerveEnclosureSouth;
+	private SwerveDrive swerveDriveDefault; //Regular swervebase if on 4 wheel
+	private SwerveDrive swerveDrivePlus; //New swervebase for 8 wheel
 
 	public static final double GEAR_RATIO = (1024d);
 	private static final double L = 21.0;
@@ -39,21 +45,31 @@ public class Drivetrain extends Subsystem {
 	private static final double D = 0.0;
 	private static final double F = 0.0;
 
-	private WPI_TalonSRX driveMotor0;
-	private WPI_TalonSRX driveMotor1;
-	private WPI_TalonSRX driveMotor2;
-	private WPI_TalonSRX driveMotor3;
+	private WPI_TalonSRX driveMotorNorthwest;
+	private WPI_TalonSRX driveMotorNortheast;
+	private WPI_TalonSRX driveMotorSoutheast;
+	private WPI_TalonSRX driveMotorSouthwest;
 
-	private WPI_TalonSRX steerMotor0;
-	private WPI_TalonSRX steerMotor1;
-	private WPI_TalonSRX steerMotor2;
-	private WPI_TalonSRX steerMotor3;
+	private WPI_TalonSRX driveMotorWest;
+	private WPI_TalonSRX driveMotorNorth;
+	private WPI_TalonSRX driveMotorEast;
+	private WPI_TalonSRX driveMotorSouth;
+
+	private WPI_TalonSRX steerMotorNorthwest;
+	private WPI_TalonSRX steerMotorNortheast;
+	private WPI_TalonSRX steerMotorSoutheast;
+	private WPI_TalonSRX steerMotorSouthwest;
+
+	private WPI_TalonSRX steerMotorWest;
+	private WPI_TalonSRX steerMotorNorth;
+	private WPI_TalonSRX steerMotorEast;
+	private WPI_TalonSRX steerMotorSouth;
 
 	double[] wheelAngles = new double[4];
 
 	private Gyro gyro = new ADXRS450_Gyro();
 	private CentricMode centricMode = CentricMode.ROBOT;
-	private boolean beakIsFront = false;
+	private boolean SouthIsFront = false;
 
 	public Drivetrain() {
 
@@ -61,99 +77,165 @@ public class Drivetrain extends Subsystem {
 
 	public void init() {
 		
-		driveMotor0 = new WPI_TalonSRX(RobotMap.leftFront);
-		driveMotor1 = new WPI_TalonSRX(RobotMap.rightFront);
-		driveMotor2 = new WPI_TalonSRX(RobotMap.rightBack);
-		driveMotor3 = new WPI_TalonSRX(RobotMap.leftBack);
+		driveMotorNorthwest = new WPI_TalonSRX(RobotMap.northwest);
+		driveMotorNortheast = new WPI_TalonSRX(RobotMap.northeast);
+		driveMotorSoutheast = new WPI_TalonSRX(RobotMap.southeast);
+		driveMotorSouthwest = new WPI_TalonSRX(RobotMap.southwest);
+		driveMotorWest = new WPI_TalonSRX(RobotMap.west);
+		driveMotorNorth = new WPI_TalonSRX(RobotMap.north);
+		driveMotorEast = new WPI_TalonSRX(RobotMap.east);
+		driveMotorSouth = new WPI_TalonSRX(RobotMap.south);
 
-		driveMotor0.setInverted(RobotMap.leftFrontI);
-		driveMotor1.setInverted(RobotMap.rightFrontI);
-		driveMotor2.setInverted(RobotMap.rightBackI);
-		driveMotor3.setInverted(RobotMap.leftBackI);
+		driveMotorNorthwest.setInverted(RobotMap.northwestI);
+		driveMotorNortheast.setInverted(RobotMap.northwestI);
+		driveMotorSoutheast.setInverted(RobotMap.southeastI);
+		driveMotorSouthwest.setInverted(RobotMap.southwestI);
+		driveMotorWest.setInverted(RobotMap.westI);
+		driveMotorNorth.setInverted(RobotMap.northI);
+		driveMotorEast.setInverted(RobotMap.eastI);
+		driveMotorSouth.setInverted(RobotMap.southI);
 
-		driveMotor0.setNeutralMode(NeutralMode.Brake);
-		driveMotor1.setNeutralMode(NeutralMode.Brake);
-		driveMotor2.setNeutralMode(NeutralMode.Brake);
-		driveMotor3.setNeutralMode(NeutralMode.Brake);
+		driveMotorNorthwest.setNeutralMode(NeutralMode.Brake);
+		driveMotorNortheast.setNeutralMode(NeutralMode.Brake);
+		driveMotorSoutheast.setNeutralMode(NeutralMode.Brake);
+		driveMotorSouthwest.setNeutralMode(NeutralMode.Brake);
+		driveMotorWest.setNeutralMode(NeutralMode.Brake);
+		driveMotorNorth.setNeutralMode(NeutralMode.Brake);
+		driveMotorEast.setNeutralMode(NeutralMode.Brake);
+		driveMotorSouth.setNeutralMode(NeutralMode.Brake);
 
-		steerMotor0 = new WPI_TalonSRX(RobotMap.leftFrontS);
-		steerMotor1 = new WPI_TalonSRX(RobotMap.rightFrontS);
-		steerMotor2 = new WPI_TalonSRX(RobotMap.rightBackS);
-		steerMotor3 = new WPI_TalonSRX(RobotMap.leftBackS);
+		steerMotorNorthwest = new WPI_TalonSRX(RobotMap.northwestS);
+		steerMotorNortheast = new WPI_TalonSRX(RobotMap.northeastS);
+		steerMotorSoutheast = new WPI_TalonSRX(RobotMap.southeastS);
+		steerMotorSouthwest = new WPI_TalonSRX(RobotMap.southwestS);
+		steerMotorWest = new WPI_TalonSRX(RobotMap.westS);
+		steerMotorNorth = new WPI_TalonSRX(RobotMap.northS);
+		steerMotorEast = new WPI_TalonSRX(RobotMap.eastS);
+		steerMotorSouth = new WPI_TalonSRX(RobotMap.southS);
 
-		steerMotor0.setInverted(RobotMap.leftFrontSI);
-		steerMotor1.setInverted(RobotMap.rightFrontSI);
-		steerMotor2.setInverted(RobotMap.rightFrontSI);
-		steerMotor3.setInverted(RobotMap.leftBackSI);
+		steerMotorNorthwest.setInverted(RobotMap.northwestSI);
+		steerMotorNortheast.setInverted(RobotMap.northeastSI);
+		steerMotorSoutheast.setInverted(RobotMap.southeastSI);
+		steerMotorSouthwest.setInverted(RobotMap.southwestSI);
+		steerMotorWest.setInverted(RobotMap.westSI);
+		steerMotorNorth.setInverted(RobotMap.northSI);
+		steerMotorEast.setInverted(RobotMap.eastSI);
+		steerMotorSouth.setInverted(RobotMap.southSI);
 
-		steerMotor0.configSelectedFeedbackSensor(FeedbackDevice.Analog);
-		steerMotor1.configSelectedFeedbackSensor(FeedbackDevice.Analog);
-		steerMotor2.configSelectedFeedbackSensor(FeedbackDevice.Analog);
-		steerMotor3.configSelectedFeedbackSensor(FeedbackDevice.Analog);
+		steerMotorNorthwest.configSelectedFeedbackSensor(FeedbackDevice.Analog);
+		steerMotorNortheast.configSelectedFeedbackSensor(FeedbackDevice.Analog);
+		steerMotorSoutheast.configSelectedFeedbackSensor(FeedbackDevice.Analog);
+		steerMotorSouthwest.configSelectedFeedbackSensor(FeedbackDevice.Analog);
+		steerMotorWest.configSelectedFeedbackSensor(FeedbackDevice.Analog);
+		steerMotorNorth.configSelectedFeedbackSensor(FeedbackDevice.Analog);
+		steerMotorEast.configSelectedFeedbackSensor(FeedbackDevice.Analog);
+		steerMotorSouth.configSelectedFeedbackSensor(FeedbackDevice.Analog);
 
-		steerMotor0.selectProfileSlot(0, 0);
-		steerMotor1.selectProfileSlot(0, 0);
-		steerMotor2.selectProfileSlot(0, 0);
-		steerMotor3.selectProfileSlot(0, 0);
+		steerMotorNorthwest.selectProfileSlot(0, 0);
+		steerMotorNortheast.selectProfileSlot(0, 0);
+		steerMotorSoutheast.selectProfileSlot(0, 0);
+		steerMotorSouthwest.selectProfileSlot(0, 0);
+		steerMotorWest.selectProfileSlot(0, 0);
+		steerMotorNorth.selectProfileSlot(0, 0);
+		steerMotorEast.selectProfileSlot(0, 0);
+		steerMotorSouth.selectProfileSlot(0, 0);
 
-		steerMotor0.config_kP(0, P);
-		steerMotor1.config_kP(0, P);
-		steerMotor2.config_kP(0, P);
-		steerMotor3.config_kP(0, P);
+		steerMotorNorthwest.config_kP(0, P);
+		steerMotorNortheast.config_kP(0, P);
+		steerMotorSoutheast.config_kP(0, P);
+		steerMotorSouthwest.config_kP(0, P);
+		steerMotorWest.config_kP(0, P);
+		steerMotorNorth.config_kP(0, P);
+		steerMotorEast.config_kP(0, P);
+		steerMotorSouth.config_kP(0, P);
+		
+		steerMotorNorthwest.config_kI(0, I);
+		steerMotorNortheast.config_kI(0, I);
+		steerMotorSoutheast.config_kI(0, I);
+		steerMotorSouthwest.config_kI(0, I);
+		steerMotorWest.config_kI(0, I);
+		steerMotorNorth.config_kI(0, I);
+		steerMotorEast.config_kI(0, I);
+		steerMotorSouth.config_kI(0, I);
 
-		steerMotor0.config_kI(0, I);
-		steerMotor1.config_kI(0, I);
-		steerMotor2.config_kI(0, I);
-		steerMotor3.config_kI(0, I);
+		steerMotorNorthwest.config_kD(0, D);		
+		steerMotorNortheast.config_kD(0, D);
+		steerMotorSoutheast.config_kD(0, D);
+		steerMotorSouthwest.config_kD(0, D);
+		steerMotorWest.config_kD(0, D);
+		steerMotorNorth.config_kD(0, D);
+		steerMotorEast.config_kD(0, D);
+		steerMotorSouth.config_kD(0, D);
 
-		steerMotor0.config_kD(0, D);		
-		steerMotor1.config_kD(0, D);
-		steerMotor2.config_kD(0, D);
-		steerMotor3.config_kD(0, D);
+		steerMotorNorthwest.config_kF(0, F);
+		steerMotorNortheast.config_kF(0, F);
+		steerMotorSoutheast.config_kF(0, F);
+		steerMotorSouthwest.config_kF(0, F);
+		steerMotorWest.config_kF(0, F);
+		steerMotorNorth.config_kF(0, F);
+		steerMotorEast.config_kF(0, F);
+		steerMotorSouth.config_kF(0, F);
 
-		steerMotor0.config_kF(0, F);
-		steerMotor1.config_kF(0, F);
-		steerMotor2.config_kF(0, F);
-		steerMotor3.config_kF(0, F);
+		swerveEnclosureNorthwest = new CanTalonSwerveEnclosure("enc NW", driveMotorNorthwest, steerMotorNorthwest, GEAR_RATIO);
+		swerveEnclosureNortheast = new CanTalonSwerveEnclosure("enc NE", driveMotorNortheast, steerMotorNortheast, GEAR_RATIO);
+		swerveEnclosureSoutheast = new CanTalonSwerveEnclosure("enc SE", driveMotorSoutheast, steerMotorSoutheast, GEAR_RATIO);
+		swerveEnclosureSouthwest = new CanTalonSwerveEnclosure("enc SW", driveMotorSouthwest, steerMotorSouthwest, GEAR_RATIO);
+		swerveEnclosureWest = new CanTalonSwerveEnclosure("enc W", driveMotorWest, steerMotorWest, GEAR_RATIO);
+		swerveEnclosureNorth = new CanTalonSwerveEnclosure("enc N", driveMotorNorth, steerMotorNorth, GEAR_RATIO);
+		swerveEnclosureEast = new CanTalonSwerveEnclosure("enc E", driveMotorEast, steerMotorEast, GEAR_RATIO);
+		swerveEnclosureSouth = new CanTalonSwerveEnclosure("enc S", driveMotorSouth, steerMotorSouth, GEAR_RATIO);
 
-		swerveEnclosure0 = new CanTalonSwerveEnclosure("enc 0", driveMotor0, steerMotor0, GEAR_RATIO);
-		swerveEnclosure1 = new CanTalonSwerveEnclosure("enc 1", driveMotor1, steerMotor1, GEAR_RATIO);
-		swerveEnclosure2 = new CanTalonSwerveEnclosure("enc 2", driveMotor2, steerMotor2, GEAR_RATIO);
-		swerveEnclosure3 = new CanTalonSwerveEnclosure("enc 3", driveMotor3, steerMotor3, GEAR_RATIO);
+		swerveEnclosureNorthwest.setReverseSteerMotor(true);
+		swerveEnclosureNortheast.setReverseSteerMotor(true);
+		swerveEnclosureSoutheast.setReverseSteerMotor(true);
+		swerveEnclosureSouthwest.setReverseSteerMotor(true);
+		swerveEnclosureWest.setReverseSteerMotor(true);
+		swerveEnclosureNorth.setReverseSteerMotor(true);
+		swerveEnclosureEast.setReverseSteerMotor(true);
+		swerveEnclosureSouth.setReverseSteerMotor(true);
 
-		swerveEnclosure0.setReverseSteerMotor(true);
-		swerveEnclosure1.setReverseSteerMotor(true);
-		swerveEnclosure2.setReverseSteerMotor(true);
-		swerveEnclosure3.setReverseSteerMotor(true);
+		swerveEnclosureNorthwest.setReverseEncoder(true);
+		swerveEnclosureNortheast.setReverseEncoder(true);
+		swerveEnclosureSoutheast.setReverseEncoder(true);
+		swerveEnclosureSouthwest.setReverseEncoder(true);
+		swerveEnclosureWest.setReverseEncoder(true);
+		swerveEnclosureNorth.setReverseEncoder(true);
+		swerveEnclosureEast.setReverseEncoder(true);
+		swerveEnclosureSouth.setReverseEncoder(true);
 
-		swerveEnclosure0.setReverseEncoder(true);
-		swerveEnclosure1.setReverseEncoder(true);
-		swerveEnclosure2.setReverseEncoder(true);
-		swerveEnclosure3.setReverseEncoder(true);
 
-		swerveDrive = new SwerveDrive(swerveEnclosure0, swerveEnclosure1, swerveEnclosure2, swerveEnclosure3, W, L);
-		swerveDrive.setCentricMode(centricMode);
+		swerveDriveDefault = new SwerveDrive(swerveEnclosureNorthwest, swerveEnclosureNortheast, swerveEnclosureSoutheast, swerveEnclosureSouthwest, W, L);
+		swerveDrivePlus = new SwerveDrive(swerveEnclosureWest, swerveEnclosureNorth, swerveEnclosureEast, swerveEnclosureSouth, W, L);
+		swerveDriveDefault.setCentricMode(centricMode);
+		swerveDrivePlus.setCentricMode(centricMode);
 		resetEncoders();
 		calibrateGyro();
 	}
-
+	
 	public void drive(double fwd, double strafe, double rotateCW) {
 		if (centricMode == CentricMode.ROBOT) {
-			if (beakIsFront) {
-				swerveDrive.move(fwd, strafe, rotateCW, getHeading());
+			if (SouthIsFront) {
+				swerveDriveDefault.move(fwd, strafe, rotateCW, getHeading());
+				swerveDrivePlus.move(fwd, strafe, rotateCW, getHeading());
 			} else {
-				swerveDrive.move(-fwd, -strafe, rotateCW, getHeading());
+				swerveDriveDefault.move(-fwd, -strafe, rotateCW, getHeading());
+				swerveDrivePlus.move(-fwd, -strafe, rotateCW, getHeading());
 			}
 		} else {
-			swerveDrive.move(-fwd, -strafe, rotateCW, getHeading());
+			swerveDriveDefault.move(-fwd, -strafe, rotateCW, getHeading());
+			swerveDrivePlus.move(-fwd, -strafe, rotateCW, getHeading());
 		}
 	}
 
 	public double[] getWheelAngles() {
-		wheelAngles[0] = steerMotor0.getSelectedSensorPosition();
-		wheelAngles[1] = steerMotor1.getSelectedSensorPosition();
-		wheelAngles[2] = steerMotor2.getSelectedSensorPosition();
-		wheelAngles[3] = steerMotor3.getSelectedSensorPosition();
+		wheelAngles[0] = steerMotorNorthwest.getSelectedSensorPosition();
+		wheelAngles[1] = steerMotorNortheast.getSelectedSensorPosition();
+		wheelAngles[2] = steerMotorSoutheast.getSelectedSensorPosition();
+		wheelAngles[3] = steerMotorSouthwest.getSelectedSensorPosition();
+		wheelAngles[4] = steerMotorWest.getSelectedSensorPosition();
+		wheelAngles[5] = steerMotorNorth.getSelectedSensorPosition();
+		wheelAngles[6] = steerMotorEast.getSelectedSensorPosition();
+		wheelAngles[7] = steerMotorSouth .getSelectedSensorPosition();
 		return wheelAngles;
 	}
 
@@ -172,28 +254,33 @@ public class Drivetrain extends Subsystem {
 	}
 
 	public void resetEncoders() {
-		swerveEnclosure1.setEncPosition(0);
-		swerveEnclosure0.setEncPosition(0);
-		swerveEnclosure3.setEncPosition(0);
-		swerveEnclosure2.setEncPosition(0);
+		swerveEnclosureNorthwest.setEncPosition(0);
+		swerveEnclosureNortheast.setEncPosition(0);
+		swerveEnclosureSoutheast.setEncPosition(0);
+		swerveEnclosureSouthwest.setEncPosition(0);
+		swerveEnclosureWest.setEncPosition(0);
+		swerveEnclosureNorth.setEncPosition(0);
+		swerveEnclosureEast.setEncPosition(0);
+		swerveEnclosureSouth.setEncPosition(0);
 		System.out.println("Drivetrain encoders have been reset.");
 	}
 
 	public void setCentricMode(CentricMode mode) {
-		swerveDrive.setCentricMode(mode);
+		swerveDriveDefault.setCentricMode(mode);
+		swerveDrivePlus.setCentricMode(mode);
 		centricMode = mode;
 	}
 
-	public void setBeakAsFront() {
-		beakIsFront = true;
+	public void setSouthAsFront() {
+		SouthIsFront = true;
 	}
 
-	public void setClawAsFront() {
-		beakIsFront = false;
+	public void setNorthAsFront() {
+		SouthIsFront = false;
 	}
 
-	public boolean beakIsFront() {
-		return beakIsFront;
+	public boolean SouthIsFront() {
+		return SouthIsFront;
 	}
 
 	public CentricMode getCentricMode() {
