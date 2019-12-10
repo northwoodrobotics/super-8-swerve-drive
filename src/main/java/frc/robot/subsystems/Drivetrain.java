@@ -5,6 +5,26 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
+
+/*            --- LAYOUT ---
+*
+*                 Front
+*      Wheel 2 ------------ Wheel 1    ---
+*          |                 |           |
+*          |                 |           |
+*          |                 |           |
+*    Left  |                 |  Right    |-- Length
+*          |                 |           |
+*          |                 |           |
+*          |                 |           |
+*      Wheel 3 ------------ Wheel 4    ---
+*                 Back
+*
+*          |                 |
+*          |----- Width -----|
+*/
+
+
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
@@ -24,21 +44,26 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 
 public class Drivetrain extends Subsystem {
+
+	//Default
 	private CanTalonSwerveEnclosure swerveEnclosureNorthwest;
 	private CanTalonSwerveEnclosure swerveEnclosureNortheast;
 	private CanTalonSwerveEnclosure swerveEnclosureSoutheast;
 	private CanTalonSwerveEnclosure swerveEnclosureSouthwest;
-
+	private SwerveDrive swerveDriveDefault; //First swervebase KNOWN AS DEFAULT
+	
+	//Plus
 	private CanTalonSwerveEnclosure swerveEnclosureWest;
 	private CanTalonSwerveEnclosure swerveEnclosureNorth;
 	private CanTalonSwerveEnclosure swerveEnclosureEast;
 	private CanTalonSwerveEnclosure swerveEnclosureSouth;
-	private SwerveDrive swerveDriveDefault; //Regular swervebase if on 4 wheel
-	private SwerveDrive swerveDrivePlus; //New swervebase for 8 wheel
+	private SwerveDrive swerveDrivePlus; //Second swervebase KNOWN AS PLUS
 
 	public static final double GEAR_RATIO = (1024d);
-	private static final double L = 21.0;
-	private static final double W = 23.5;
+	private static final double L_Default = 35;
+	private static final double W_Default = 35;
+	private static final double L_Plus = 35;
+	private static final double W_Plus = 35;
 
 	private static final double P = 10.0;
 	private static final double I = 0.0;
@@ -65,7 +90,7 @@ public class Drivetrain extends Subsystem {
 	private WPI_TalonSRX steerMotorEast;
 	private WPI_TalonSRX steerMotorSouth;
 
-	double[] wheelAngles = new double[4];
+	double[] wheelAngles = new double[8];
 
 	private Gyro gyro = new ADXRS450_Gyro();
 	private CentricMode centricMode = CentricMode.ROBOT;
@@ -204,8 +229,8 @@ public class Drivetrain extends Subsystem {
 		swerveEnclosureSouth.setReverseEncoder(true);
 
 
-		swerveDriveDefault = new SwerveDrive(swerveEnclosureNorthwest, swerveEnclosureNortheast, swerveEnclosureSoutheast, swerveEnclosureSouthwest, W, L);
-		swerveDrivePlus = new SwerveDrive(swerveEnclosureWest, swerveEnclosureNorth, swerveEnclosureEast, swerveEnclosureSouth, W, L);
+		swerveDriveDefault = new SwerveDrive(swerveEnclosureNorthwest, swerveEnclosureNortheast, swerveEnclosureSoutheast, swerveEnclosureSouthwest, W_Default, L_Default);
+		swerveDrivePlus = new SwerveDrive(swerveEnclosureWest, swerveEnclosureNorth, swerveEnclosureEast, swerveEnclosureSouth, W_Plus, L_Plus);
 		swerveDriveDefault.setCentricMode(centricMode);
 		swerveDrivePlus.setCentricMode(centricMode);
 		resetEncoders();
