@@ -240,15 +240,15 @@ public class Drivetrain extends Subsystem {
 	public void drive(double fwd, double strafe, double rotateCW) {
 		if (centricMode == CentricMode.ROBOT) {
 			if (SouthIsFront) {
-				swerveDriveDefault.move(fwd, strafe, rotateCW, getHeading());
-				swerveDrivePlus.move(fwd, strafe, rotateCW, getHeading());
+				swerveDriveDefault.move(fwd, strafe, rotateCW, getHeadingDefault());
+				swerveDrivePlus.move(fwd, strafe, rotateCW, getHeadingPlus() + 45 );
 			} else {
-				swerveDriveDefault.move(-fwd, -strafe, rotateCW, getHeading());
-				swerveDrivePlus.move(-fwd, -strafe, rotateCW, getHeading());
+				swerveDriveDefault.move(-fwd, -strafe, rotateCW, getHeadingDefault());
+				swerveDrivePlus.move(-fwd, -strafe, rotateCW, getHeadingPlus());
 			}
 		} else {
-			swerveDriveDefault.move(-fwd, -strafe, rotateCW, getHeading());
-			swerveDrivePlus.move(-fwd, -strafe, rotateCW, getHeading());
+			swerveDriveDefault.move(-fwd, -strafe, rotateCW, getHeadingDefault());
+			swerveDrivePlus.move(-fwd, -strafe, rotateCW, getHeadingPlus());
 		}
 	}
 
@@ -264,8 +264,11 @@ public class Drivetrain extends Subsystem {
 		return wheelAngles;
 	}
 
-	public double getHeading() {
+	public double getHeadingDefault() {
 		return gyro.getAngle() % 360;
+	}
+	public double getHeadingPlus() {
+		return (gyro.getAngle() % 360) - 45;
 	}
 
 	public void calibrateGyro() {
