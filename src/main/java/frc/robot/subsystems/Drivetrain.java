@@ -241,7 +241,7 @@ public class Drivetrain extends Subsystem {
 		if (centricMode == CentricMode.ROBOT) {
 			if (SouthIsFront) {
 				swerveDriveDefault.move(fwd, strafe, rotateCW, getHeadingDefault());
-				swerveDrivePlus.move(fwd, strafe, rotateCW, getHeadingPlus() + 45 );
+				swerveDrivePlus.move(fwd, strafe, rotateCW, getHeadingPlus());
 			} else {
 				swerveDriveDefault.move(-fwd, -strafe, rotateCW, getHeadingDefault());
 				swerveDrivePlus.move(-fwd, -strafe, rotateCW, getHeadingPlus());
