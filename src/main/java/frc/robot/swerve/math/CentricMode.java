@@ -1,4 +1,4 @@
-package org.usfirst.northwoodrobotics6300.swerve.math;
+package frc.robot.swerve.math;
 
 /**
  * The operation mode for the robot:

@@ -31,12 +31,11 @@ import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 
-import org.usfirst.northwoodrobotics6300.swerve.drive.SwerveDrive;
-import org.usfirst.northwoodrobotics6300.swerve.math.CentricMode;
+import frc.robot.swerve.drive.SwerveDrive;
+import frc.robot.swerve.math.CentricMode;
 import frc.robot.RobotMap;
 import frc.robot.commands.teleop.TeleDrive;
-import org.usfirst.frc4048.swerve.drive.CanTalonSwerveEnclosure;
-
+import frc.robot.swerve.drive.CanTalonSwerveEnclosure;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -50,14 +49,13 @@ public class Drivetrain extends Subsystem {
 	private CanTalonSwerveEnclosure swerveEnclosureNortheast;
 	private CanTalonSwerveEnclosure swerveEnclosureSoutheast;
 	private CanTalonSwerveEnclosure swerveEnclosureSouthwest;
-	private SwerveDrive swerveDriveDefault; //First swervebase KNOWN AS DEFAULT
 	
 	//Plus
 	private CanTalonSwerveEnclosure swerveEnclosureWest;
 	private CanTalonSwerveEnclosure swerveEnclosureNorth;
 	private CanTalonSwerveEnclosure swerveEnclosureEast;
 	private CanTalonSwerveEnclosure swerveEnclosureSouth;
-	private SwerveDrive swerveDrivePlus; //Second swervebase KNOWN AS PLUS
+	private SwerveDrive swerveDrive;
 
 	public static final double GEAR_RATIO = (1024d);
 	private static final double L_Default = 35;
@@ -229,10 +227,9 @@ public class Drivetrain extends Subsystem {
 		swerveEnclosureSouth.setReverseEncoder(true);
 
 
-		swerveDriveDefault = new SwerveDrive(swerveEnclosureNorthwest, swerveEnclosureNortheast, swerveEnclosureSoutheast, swerveEnclosureSouthwest, W_Default, L_Default);
-		swerveDrivePlus = new SwerveDrive(swerveEnclosureWest, swerveEnclosureNorth, swerveEnclosureEast, swerveEnclosureSouth, W_Plus, L_Plus);
-		swerveDriveDefault.setCentricMode(centricMode);
-		swerveDrivePlus.setCentricMode(centricMode);
+		swerveDrive = new SwerveDrive(swerveEnclosureNorthwest, swerveEnclosureNortheast, swerveEnclosureSoutheast, swerveEnclosureSouthwest, swerveEnclosureWest, swerveEnclosureNorth, swerveEnclosureEast, swerveEnclosureSouth, W_Default, L_Default, W_Plus, L_Plus);
+		swerveDrive.setCentricMode(centricMode);
+
 		resetEncoders();
 		calibrateGyro();
 	}
@@ -240,15 +237,12 @@ public class Drivetrain extends Subsystem {
 	public void drive(double fwd, double strafe, double rotateCW) {
 		if (centricMode == CentricMode.ROBOT) {
 			if (SouthIsFront) {
-				swerveDriveDefault.move(fwd, strafe, rotateCW, getHeadingDefault());
-				swerveDrivePlus.move(fwd, strafe, rotateCW, getHeadingPlus());
+				swerveDrive.move(fwd, strafe, rotateCW, getHeading());
 			} else {
-				swerveDriveDefault.move(-fwd, -strafe, rotateCW, getHeadingDefault());
-				swerveDrivePlus.move(-fwd, -strafe, rotateCW, getHeadingPlus());
+				swerveDrive.move(-fwd, -strafe, rotateCW, getHeading());
 			}
 		} else {
-			swerveDriveDefault.move(-fwd, -strafe, rotateCW, getHeadingDefault());
-			swerveDrivePlus.move(-fwd, -strafe, rotateCW, getHeadingPlus());
+			swerveDrive.move(-fwd, -strafe, rotateCW, getHeading());
 		}
 	}
 
@@ -264,11 +258,8 @@ public class Drivetrain extends Subsystem {
 		return wheelAngles;
 	}
 
-	public double getHeadingDefault() {
+	public double getHeading() {
 		return gyro.getAngle() % 360;
-	}
-	public double getHeadingPlus() {
-		return (gyro.getAngle() % 360) - 45;
 	}
 
 	public void calibrateGyro() {
@@ -294,8 +285,7 @@ public class Drivetrain extends Subsystem {
 	}
 
 	public void setCentricMode(CentricMode mode) {
-		swerveDriveDefault.setCentricMode(mode);
-		swerveDrivePlus.setCentricMode(mode);
+		swerveDrive.setCentricMode(mode);
 		centricMode = mode;
 	}
 

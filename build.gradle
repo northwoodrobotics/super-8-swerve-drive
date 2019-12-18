@@ -50,7 +50,7 @@ repositories {
 dependencies {
     compile wpi.deps.wpilib()
     compile wpi.deps.vendor.java()
-    compile files('libs/wpiapi-java-5.14.1.jar','libs/Swerve-Drive-Library-Java.jar')
+    compile files('libs/wpiapi-java-5.14.1.jar')
     nativeZip wpi.deps.vendor.jni(wpi.platforms.roborio)
     nativeDesktopZip wpi.deps.vendor.jni(wpi.platforms.desktop)
     testCompile 'junit:junit:4.12'

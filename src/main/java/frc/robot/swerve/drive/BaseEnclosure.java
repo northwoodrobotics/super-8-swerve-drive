@@ -1,4 +1,4 @@
-package org.usfirst.northwoodrobotics6300.swerve.drive;
+package frc.robot.swerve.drive;
 
 /**
  * Base class for enclosure. Implements common behavior that helps with the robot driving:
@@ -48,14 +48,12 @@ public abstract class BaseEnclosure implements SwerveEnclosure {
 
     /**
      * @return the value of the angle encoder (used to calculate current wheel position)
-     * TODO: This should be converted to -1 - +1 range...
      */
     protected abstract int getEncPosition();
 
     /**
      * Sets the value of the angle encoder (used for aligning wheel in case of drift)
      * @param encPosition the current encoder value
-     * TODO: This should be converted to -1 - +1 range...
      */
     protected abstract void setEncPosition(int encPosition);
 

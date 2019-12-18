@@ -1,8 +1,8 @@
-package org.usfirst.northwoodrobotics6300.swerve.drive;
+package frc.robot.swerve.drive;
 
-import org.usfirst.northwoodrobotics6300.swerve.math.CentricMode;
-import org.usfirst.northwoodrobotics6300.swerve.math.SwerveDirective;
-import org.usfirst.northwoodrobotics6300.swerve.math.SwerveMath;
+import frc.robot.swerve.math.CentricMode;
+import frc.robot.swerve.math.SwerveDirective;
+import frc.robot.swerve.math.SwerveMath;
 
 import java.util.List;
 

@@ -2,7 +2,7 @@ package frc.robot.commands.button;
 
 import frc.robot.OI;
 import frc.robot.subsystems.Drivetrain;
-import org.usfirst.frc4048.swerve.math.CentricMode;
+import frc.robot.swerve.math.CentricMode;
 
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.Timer;
