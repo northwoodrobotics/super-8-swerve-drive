@@ -130,10 +130,10 @@ public class SwerveMath {
         double wsSE =  Math.sqrt(Math.pow(a_Def,2)+Math.pow(c_Def,2));
         double wsSW =  Math.sqrt(Math.pow(a_Def,2)+Math.pow(d_Def,2));
         
-        double wsW =  Math.sqrt(Math.pow(d_Plus,2));
-        double wsN =  Math.sqrt(Math.pow(b_Plus,2));
-        double wsE =  Math.sqrt(Math.pow(c_Plus,2));
-        double wsS =  Math.sqrt(Math.pow(a_Plus,2));
+        double wsW =  Math.sqrt(Math.pow(d_Plus,2)+Math.pow((b_Plus/2 + a_Plus/2),2));
+        double wsN =  Math.sqrt(Math.pow(b_Plus,2)+Math.pow((d_Plus/2 + c_Plus/2),2));
+        double wsE =  Math.sqrt(Math.pow(c_Plus,2)+Math.pow((b_Plus/2 + a_Plus/2),2));
+        double wsS =  Math.sqrt(Math.pow(a_Plus,2)+Math.pow((d_Plus/2 + c_Plus/2),2));
 
         //These are the equations for the wheel angle, for motors 1-4
         double waNW =  Math.atan2(b_Def,d_Def)*180/Math.PI;
@@ -141,10 +141,10 @@ public class SwerveMath {
         double waSE =  Math.atan2(a_Def,c_Def)*180/Math.PI;
         double waSW =  Math.atan2(a_Def,d_Def)*180/Math.PI;
 
-        double waW =  Math.atan2(0,d_Def)*180/Math.PI;
-        double waN =  Math.atan2(b_Def,0)*180/Math.PI;
-        double waE =  Math.atan2(0,c_Def)*180/Math.PI;
-        double waS =  Math.atan2(a_Def,0)*180/Math.PI;
+        double waW =  Math.atan2((b_Plus/2 + a_Plus/2),d_Def)*180/Math.PI;
+        double waN =  Math.atan2(b_Def,(d_Plus/2 + c_Plus/2))*180/Math.PI;
+        double waE =  Math.atan2((b_Plus/2 + a_Plus/2),c_Def)*180/Math.PI;
+        double waS =  Math.atan2(a_Def,(d_Plus/2 + c_Plus/2))*180/Math.PI;
 
         //This is to normalize the speed (if the largest speed is greater than 1, change accordingly).
         double max = wsNW;
