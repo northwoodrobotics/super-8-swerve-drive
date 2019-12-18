@@ -31,8 +31,8 @@ import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 
-import org.usfirst.frc4048.swerve.drive.SwerveDrive;
-import org.usfirst.frc4048.swerve.math.CentricMode;
+import org.usfirst.northwoodrobotics6300.swerve.drive.SwerveDrive;
+import org.usfirst.northwoodrobotics6300.swerve.math.CentricMode;
 import frc.robot.RobotMap;
 import frc.robot.commands.teleop.TeleDrive;
 import org.usfirst.frc4048.swerve.drive.CanTalonSwerveEnclosure;
