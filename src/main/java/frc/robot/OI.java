@@ -23,7 +23,8 @@ public class OI {
 	public static final JoystickButton driveY = new JoystickButton(driveController, 4);
 	public static final JoystickButton driveLTrigger = new JoystickButton(driveController, 5);
 	public static final JoystickButton driveRTrigger = new JoystickButton(driveController, 6);
-
+	public static final JoystickButton leftStick = new JoystickButton(driveController, 9);
+	public static final JoystickButton rightStick = new JoystickButton(driveController, 10);
 
 	public OI(Robot robot) {
 		driveA.whenPressed(new ToggleFrontDirection(robot.drivetrain));
@@ -57,7 +58,7 @@ public class OI {
 		assert (Math.abs(output) <= 1) : "expected to output a smaller number than the 1 of " + 1;
 		return output;
 	}
-
+	
 	/**
 	 * @return a double[] with the x output in [0] and the y output in [1]
 	 */
